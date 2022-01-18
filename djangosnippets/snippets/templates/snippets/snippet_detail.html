@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Djangoスニペット</title>
+  </head>
+  <body>
+    <div>
+      <h2>{{snippet.title}} by {{snippet.created_by.username}}</h2>
+      <small>投稿日：{{snippet.created_at}}</small>
+      <pre>{{snippet.code}}</pre>
+      <p>{{snippet.description}}</p>
+    </div>
+  </body>
+</html>

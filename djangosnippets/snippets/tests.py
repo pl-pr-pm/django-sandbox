@@ -7,7 +7,7 @@ from snippets.models import Snippet
 
 UserModel = get_user_model()
 
-class TopPageRenderSnippetsTest(TestCase):
+class SnippetDetailTest(TestCase):
   def setUp(self):
     self.user = UserModel.objects.create(
       username = "test_user",
@@ -21,15 +21,11 @@ class TopPageRenderSnippetsTest(TestCase):
       created_by=self.user,
     )
 
-  def test_should_returns_snippet_title(self):
-    request = RequestFactory().get("/")
-    request.user = self.user
-    response = top(request)
-    self.assertContains(response,self.snippet.title)
+  def test_should_use_expected_template(self):
+    response = self.client.get('/snippets/%s/' % self.snippet.id)
+    self.assertTemplateUsed(response, "snippets/snippet_detail.html")
   
-  def test_should_return_username(self):
-    request = RequestFactory().get("/")
-    request.user = self.user
-    response = top(request)
-    self.assertContains(response, self.user.username)
+  def test_top_page_returns_200_and_expected_heading(self):
+    response = self.client.get("/snippets/%s/" % self.snippet.id)
+    self.assertContains(response, self.snippet.title, status_code=200)
 
