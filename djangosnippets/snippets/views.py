@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from snippets.models import Snippet
 
 def top(request):
-  return HttpResponse(b"Hello World")
+  snippets = Snippet.objects.all()
+  context = {"snippets": snippets}
+  return render(request, "snippets/top.html", context)
 
 def snippet_new(request):
   return HttpResponse("スニペットの登録")
