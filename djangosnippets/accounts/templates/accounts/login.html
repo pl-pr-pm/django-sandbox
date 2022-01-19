@@ -1,0 +1,19 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Djangoスニペット</title>
+  </head>
+  <body>
+    <h2>Login</h2>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}" />
+      {% bootstrap_form form %}
+      <button type="submit">LOGIN</button>
+      <!-- { %bootstrap_button button_type="submit" content="Login" %}-->
+    </form>
+  </body>
+</html>

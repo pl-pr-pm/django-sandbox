@@ -1,9 +1,11 @@
 from django.http import HttpResponse,HttpResponseForbidden
-from snippets.models import Snippet
+from snippets.models import Snippet, Comment
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 
-from snippets.forms import SnippetForm
+from django.core.exceptions import ObjectDoesNotExist
+
+from snippets.forms import SnippetForm, CommentForm
 
 def top(request):
   snippets = Snippet.objects.all()
@@ -40,5 +42,23 @@ def snippet_edit(request, snippet_id):
 
 def snippet_detail(request, snippet_id):
     snippet = get_object_or_404(Snippet, pk=snippet_id)
-    context = {"snippet": snippet}
+    try:
+      comments = Comment.objects.filter(commented_to=snippet.id)
+    except ObjectDoesNotExist:
+      comments = None
+    print(comments)
+    context = {"snippet": snippet, "comments": comments}
     return render(request, "snippets/snippet_detail.html", context)
+
+def comment_new(request, snippet_id):
+  print (snippet_id)
+  print(request.body)
+  if request.method == 'POST':
+      form = CommentForm(request.POST)
+      target_snippet = Snippet.objects.get(pk=snippet_id)
+      if form.is_valid():
+        comment = form.save(commit=False)
+        comment.commented_to = target_snippet
+        comment.commented_by = request.user
+        comment.save()
+      return redirect('snippet_detail', snippet_id=target_snippet.pk)

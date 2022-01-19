@@ -8,9 +8,26 @@
   <body>
     <div>
       <h2>{{snippet.title}} by {{snippet.created_by.username}}</h2>
-      <small>投稿日：{{snippet.created_at}}</small>
+      <small>投稿日:{{snippet.created_at}}</small>
       <pre>{{snippet.code}}</pre>
       <p>{{snippet.description}}</p>
+      <div>
+        <h3>コメント一覧</h3>
+        {% if comments %}
+        <div>
+          {% for comment in comments %}
+          <p>{{comment.text}}</p>
+          <small>by {{comment.commented_by}}さん {{comment.commented_at}}</small>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <h3>コメントを投稿する</h3>
+        <form action="{% url 'comment_new' snippet.id%}" method="post" >
+          {% csrf_token %}
+          <input type="text" name="test" />
+        <button type="submit">投稿</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>
